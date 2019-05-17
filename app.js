@@ -15,11 +15,42 @@ client.on('ready', () => console.log('Ready'));
 client.on('disconnect', () => console.log('Disconnected. Will reconnect...'));
 client.on('reconnecting', () => console.log('reconnecting...'));
 
+// Bot reacting to user message
+
 client.on('message', async message => {
   if (message.author.bot) {
     return;
   }
-  if (!message.content.startsWith(prefix)) {
+
+  // Bot chatter
+  if (
+    !/[A-Z0-9]/g.test(message.content.charAt(0)) &&
+    message.content !== 'lol'
+  ) {
+    let UpfirstLetter = message.content.charAt(0).toUpperCase();
+    let restOfLetters = message.content.slice(1);
+
+    if (
+      message.content.charAt(0) === 'l' &&
+      message.content.match(/lonely/gi)
+    ) {
+      return message.channel.send(
+        `*${UpfirstLetter}${restOfLetters}. Don't worry I'm here for you :)`
+      );
+    }
+    return message.channel.send(`*${UpfirstLetter}${restOfLetters}`);
+  }
+
+  // if (message.content.search('hello' || 'hi')) {
+  //   return message.channel.send("I'm here for you :] ");
+  // }
+  if (message.content.match(/lonely/gi)) {
+    return message.channel.send("I'm here for you :] ");
+  }
+
+  // unknown command; must be after chatter
+
+  if (!message.content.startsWith(prefix) && message.content !== 'lol') {
     return message.channel.send("Unknown command... it's okay, baby :3");
   }
 
@@ -70,6 +101,8 @@ client.on('message', async message => {
     message.channel.send('Roger! ^_^');
     message.member.voiceChannel.leave();
   }
+
+  // End of music play
 
   // LOVE: gif + affection
   if (message.content.startsWith(`${prefix}love`)) {
