@@ -11,7 +11,12 @@ const giphy = GphApiClient(giphyToken);
 
 client.on('warn', console.warn);
 client.on('error', console.error);
-client.on('ready', () => console.log('Ready'));
+
+client.on('ready', () => {
+  console.log('Ready');
+  client.user.setActivity('with my master 😉');
+});
+
 client.on('disconnect', () => console.log('Disconnected. Will reconnect...'));
 client.on('reconnecting', () => console.log('reconnecting...'));
 
@@ -23,17 +28,13 @@ client.on('message', async message => {
   }
 
   // Bot chatter
-  if (
-    !/[A-Z0-9]/g.test(message.content.charAt(0)) &&
-    message.content !== 'lol'
-  ) {
+  const firstLetter = message.content.charAt(0);
+
+  if (firstLetter.toUpperCase() !== firstLetter && message.content !== 'lol') {
     let UpfirstLetter = message.content.charAt(0).toUpperCase();
     let restOfLetters = message.content.slice(1);
 
-    if (
-      message.content.charAt(0) === 'l' &&
-      message.content.match(/lonely/gi)
-    ) {
+    if (firstLetter === 'l' && message.content.match(/lonely/gi)) {
       return message.channel.send(
         `*${UpfirstLetter}${restOfLetters}. Don't worry I'm here for you :)`
       );
@@ -51,7 +52,7 @@ client.on('message', async message => {
   // unknown command; must be after chatter
 
   if (!message.content.startsWith(prefix) && message.content !== 'lol') {
-    return message.channel.send("Unknown command... it's okay, baby :3");
+    return message.channel.send("Unknown command 🙃... it's okay, baby :3");
   }
 
   const args = message.content.split(' ');
@@ -96,7 +97,7 @@ client.on('message', async message => {
     dispatcher.setVolumeLogarithmic(5 / 5);
   } else if (message.content.startsWith(`${prefix}stop`)) {
     if (!message.member.voiceChannel) {
-      return message.channel.send("you're not in our channel!");
+      return message.channel.send("you're not in our channel! 😮");
     }
     message.channel.send('Roger! ^_^');
     message.member.voiceChannel.leave();
@@ -113,6 +114,7 @@ client.on('message', async message => {
         let responseIndex = Math.floor(Math.random() * 10 + 1) % totalResponses;
         let responseFinal = res.data[responseIndex];
 
+        message.react('💗');
         message.channel.send('I love you:blue_heart:', {
           files: [responseFinal.images.fixed_height.url]
         });
